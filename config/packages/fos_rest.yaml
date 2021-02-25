@@ -1,0 +1,6 @@
+
+fos_rest:
+  view:
+    formats: { json: true, xml: false, rss: false }
+  serializer:
+    serialize_null: true
