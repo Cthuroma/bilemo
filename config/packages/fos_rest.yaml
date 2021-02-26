@@ -1,6 +1,11 @@
-
 fos_rest:
   view:
-    formats: { json: true, xml: false, rss: false }
+    formats: { json: true, xml: false, rss: false, html: false }
+
   serializer:
     serialize_null: true
+
+  body_converter:
+    enabled: true
+    validate: true
+    validation_errors_argument: validationErrors

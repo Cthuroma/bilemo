@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Repository\ClientRepository;
-use Doctrine\DBAL\Schema\Constraint;
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
