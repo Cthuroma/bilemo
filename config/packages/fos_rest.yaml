@@ -5,6 +5,8 @@ fos_rest:
   serializer:
     serialize_null: true
 
+  param_fetcher_listener: true
+
   body_converter:
     enabled: true
     validate: true
