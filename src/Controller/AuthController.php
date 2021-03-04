@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use App\Entity\Client;
@@ -45,21 +44,21 @@ class AuthController extends AbstractFOSRestController
         $dbClient = $this->clientRepository->findOneByName($client->getName());
 
         if (!$dbClient || !$this->encoder->isPasswordValid($dbClient, $client->getPassword())) {
-            return $this->json([
-                                   'message' => 'Name or Password is wrong.',
-                               ]);
+            $data = ['message' => 'Wrong credentials',];
+            $view = $this->view($data, 401);
+            $view->setFormat('json');
+            return $this->handleView($view);
         }
+
         $payload = [
             "client" => $client->getName(),
             "exp"  => (new \DateTime())->modify("+5 hours")->getTimestamp(),
         ];
 
-
         $jwt = JWT::encode($payload, $this->getParameter('jwt_secret'));
-        return $this->json([
-                               'message' => 'success!',
-                               'token' => $jwt,
-                               'type' => 'Bearer'
-                           ]);
+        $data = ['message' => 'Successfully logged in', 'token' => $jwt, 'type' => 'Bearer'];
+        $view = $this->view($data, 200);
+        $view->setFormat('json');
+        return $this->handleView($view);
     }
 }
