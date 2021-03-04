@@ -10,7 +10,7 @@ use App\Repository\ClientRepository;
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @UniqueEntity(fields={"name"}, message="There is already a client with this name")
  */
 class Client implements UserInterface
 {

@@ -14,11 +14,22 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class AppFixtures extends Fixture
 {
 
+    /**
+     * @var UserPasswordEncoder
+     */
+    private $encoder;
+
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+        $this->encoder = $encoder;
+    }
+
     public function load(ObjectManager $manager)
     {
         $client = new Client();
         $client->setName('Client');
-        $client->setPassword('client');
+        $client->setPassword($this->encoder->encodePassword(
+            $client,'client'));
         $manager->persist($client);
 
         for ($i = 0; $i < 20; $i++) {
