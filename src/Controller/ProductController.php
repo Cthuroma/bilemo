@@ -7,6 +7,7 @@ use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends AbstractFOSRestController
@@ -30,6 +31,7 @@ class ProductController extends AbstractFOSRestController
 
     /**
      * @Rest\Get("/products")
+     * @IsGranted("ROLE_USER")
      */
     public function listProducts(): Response
     {

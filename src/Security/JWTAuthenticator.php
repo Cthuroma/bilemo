@@ -37,7 +37,7 @@ class JWTAuthenticator extends AbstractGuardAuthenticator
     public function supports(Request $request)
     {
         if(!$request->headers->has('Authorization')){
-            throw new AuthenticationException('Authentication Required');
+            return false;//throw new AuthenticationException('Authentication Required');
         }
         return true;
     }

@@ -42,6 +42,12 @@ class User
      */
     private $registered_at;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $client;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -79,6 +85,18 @@ class User
     public function setRegisteredAt(\DateTimeInterface $registered_at): self
     {
         $this->registered_at = $registered_at;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

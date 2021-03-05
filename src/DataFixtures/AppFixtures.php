@@ -26,11 +26,17 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $client = new Client();
-        $client->setName('Client');
-        $client->setPassword($this->encoder->encodePassword(
-            $client,'client'));
-        $manager->persist($client);
+        $client1 = new Client();
+        $client1->setName('Client 1');
+        $client1->setPassword($this->encoder->encodePassword(
+            $client1,'client1'));
+        $manager->persist($client1);
+
+        $client2 = new Client();
+        $client2->setName('Client 2');
+        $client2->setPassword($this->encoder->encodePassword(
+            $client2,'client2'));
+        $manager->persist($client2);
 
         for ($i = 0; $i < 20; $i++) {
             $product = new Product();
@@ -45,6 +51,16 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setName('User '.($i+1));
             $user->setMail('user'.($i+1).'@mail.com');
+            $user->setClient($client1);
+            $user->setRegisteredAt(new \DateTime());
+            $manager->persist($user);
+        }
+
+        for ($i = 20; $i < 40; $i++) {
+            $user = new User();
+            $user->setName('User '.($i+1));
+            $user->setMail('user'.($i+1).'@mail.com');
+            $user->setClient($client2);
             $user->setRegisteredAt(new \DateTime());
             $manager->persist($user);
         }
