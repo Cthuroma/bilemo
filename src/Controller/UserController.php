@@ -10,10 +10,8 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Request\ParamFetcher;
-use Hateoas\HateoasBuilder;
 use Hateoas\Representation\CollectionRepresentation;
 use Hateoas\Representation\PaginatedRepresentation;
-use JMS\Serializer\SerializerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -30,16 +28,10 @@ class UserController extends AbstractFOSRestController
      */
     private $entityManager;
 
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager, SerializerInterface $serializer)
+    public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager)
     {
         $this->userRepository = $userRepository;
         $this->entityManager = $entityManager;
-        $this->serializer = $serializer;
     }
 
     /**
@@ -50,7 +42,6 @@ class UserController extends AbstractFOSRestController
      */
     public function listUsers(ParamFetcher $paramFetcher): Response
     {
-        $hateoas = HateoasBuilder::create()->build();
         $limit = $paramFetcher->get('limit');
         $page = $paramFetcher->get('page');
         $client = $this->getUser();
@@ -67,12 +58,7 @@ class UserController extends AbstractFOSRestController
             'page',
             'limit'
         );
-        $json = $this->serializer->serialize($paginated, 'json');
-        $data = $this->serializer->deserialize($json, 'array', 'json');
-        $view = $this->view($data, 200);
-        $context = new Context();
-        $context->setGroups(['list']);
-        $view->setContext($context);
+        $view = $this->view($paginated, 200);
         $view->setFormat('json');
         return $this->handleView($view);
     }
