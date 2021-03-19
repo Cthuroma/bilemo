@@ -10,16 +10,17 @@ security:
                 property: 'name'
         users_in_memory: { memory: null }
     firewalls:
-        main:
-            pattern: ^/(api/)(?!login)
-            provider: users
-            guard:
-                authenticators:
-                    - App\Security\JWTAuthenticator
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
+        main:
+            pattern: ^/
+            anonymous: true
+            provider: users
+            stateless: true
+            guard:
+                authenticators:
+                    - App\Security\JWTAuthenticator
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 
@@ -29,5 +30,6 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/api/doc,   roles: [IS_ANONYMOUS, ROLE_USER]}
+        - { path: ^/api/login, roles: IS_ANONYMOUS }
+        - { path: ^/api/,      roles: ROLE_USER }

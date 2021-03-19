@@ -2,15 +2,18 @@
 
 namespace App\Controller;
 
-use FOS\RestBundle\Context\Context;
+use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Request\ParamFetcher;
+use Hateoas\Representation\CollectionRepresentation;
+use Hateoas\Representation\PaginatedRepresentation;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use App\Entity\User;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 class UserController extends AbstractFOSRestController
@@ -25,7 +28,6 @@ class UserController extends AbstractFOSRestController
      */
     private $entityManager;
 
-
     public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager)
     {
         $this->userRepository = $userRepository;
@@ -33,16 +35,30 @@ class UserController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\Get("/users")
+     * @Rest\Get("/users", name="list_users")
+     *
+     * @QueryParam(name="page", requirements="\d+", default="1")
+     * @QueryParam(name="limit", requirements="\d+", default="10")
      */
-    public function listUsers(): Response
+    public function listUsers(ParamFetcher $paramFetcher): Response
     {
-        //TODO: Filter by logged client once Auth is implemented
-        $data = $this->userRepository->findAll();
-        $view = $this->view($data, 200);
-        $context = new Context();
-        $context->setGroups(['list']);
-        $view->setContext($context);
+        $limit = $paramFetcher->get('limit');
+        $page = $paramFetcher->get('page');
+        $client = $this->getUser();
+        $users = $this->userRepository->getUsers($client, $limit, $page);
+        $collection = new CollectionRepresentation($users);
+        $pages = (int)ceil($users->count() / $limit);
+        $paginated = new PaginatedRepresentation(
+            $collection,
+            'list_users',
+            array(),
+            $page,
+            $limit,
+            $pages,
+            'page',
+            'limit'
+        );
+        $view = $this->view($paginated, 200);
         $view->setFormat('json');
         return $this->handleView($view);
     }
