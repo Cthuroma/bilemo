@@ -6,9 +6,23 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @Serializer\ExclusionPolicy("all")
+ *
+ * @Hateoas\Relation(
+ *     "self",
+ *     href = "expr('/api/users/' ~ object.getId())",
+ *     exclusion = @Hateoas\Exclusion(groups = {"list","describe"})
+ *)
+ *
+ * @Hateoas\Relation(
+ *     "all",
+ *     href = "expr('/api/users')",
+ *     exclusion = @Hateoas\Exclusion(groups = {"list","describe"})
+ * )
  */
 class User
 {
@@ -16,7 +30,7 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     *
+     * @Serializer\Expose
      * @Serializer\Groups({"list"})
      */
     private $id;
@@ -24,20 +38,21 @@ class User
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min=3)
+     * @Serializer\Expose
      * @Serializer\Groups({"list", "describe"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     *
+     * @Serializer\Expose
      * @Serializer\Groups({"describe"})
      */
     private $mail;
 
     /**
      * @ORM\Column(type="datetime")
-     * @
+     * @Serializer\Expose
      * @Serializer\Groups({"describe"})
      */
     private $registered_at;
@@ -45,7 +60,6 @@ class User
     /**
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
-     * @Serializer\Exclude
      */
     private $client;
 

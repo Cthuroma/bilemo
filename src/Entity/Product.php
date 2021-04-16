@@ -5,9 +5,22 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
+ *
+ * @Hateoas\Relation(
+ *     "self",
+ *     href = "expr('/api/products/' ~ object.getId())",
+ *     exclusion = @Hateoas\Exclusion(groups = {"list","describe"})
+ *)
+ *
+ * @Hateoas\Relation(
+ *     "all",
+ *     href = "expr('/api/products')",
+ *     exclusion = @Hateoas\Exclusion(groups = {"list","describe"})
+ * )
  */
 class Product
 {

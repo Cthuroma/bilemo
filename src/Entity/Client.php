@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use JMS\Serializer\Annotation as Serializer;
 use App\Repository\ClientRepository;
 
 /**
@@ -30,11 +31,13 @@ class Client implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Serializer\Groups({"login"})
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=100)
+     * @Serializer\Groups({"login"})
      */
     private $name;
 
