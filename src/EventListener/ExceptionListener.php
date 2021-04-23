@@ -24,11 +24,9 @@ class ExceptionListener
             if($exception instanceof UnsupportedMediaTypeHttpException){
                 $response->setContent(json_encode(['error' => 'Please provide a JSON request body.']));
             }
-        } else {
-            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $event->setResponse($response);
         }
-
-        // sends the modified response object to the event
+        $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
         $event->setResponse($response);
     }
 }
