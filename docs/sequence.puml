@@ -1,0 +1,21 @@
+@startuml
+actor Client
+control API
+database DB
+Client -> API: POST /login {credentials}
+API --> DB: Get actual credentials
+DB --> API: Return the data for validation and TOKEN generation
+API -> Client: Return 200 and Bearer TOKEN
+Client -> API: GET /users {Auth: Bearer TOKEN, Page and Limit}
+API --> DB: Get all users belonging to logged client
+DB --> API: Return the data
+API -> Client: Return 200 with the list of users and links to navigate
+Client -> API: POST /users {Auth: Bearer TOKEN, User Data}
+API --> DB: Insert new user linked to client
+DB --> API: Return query result
+API -> Client: Return 201 with the new User
+Client -> API: DELETE /users/{id} {Auth: Bearer TOKEN}
+API --> DB: Delete user
+DB --> API: Return query result
+API -> Client: Return 204 with no content
+@enduml

@@ -110,7 +110,7 @@ class ProductController extends AbstractFOSRestController
     public function describeProduct(int $id): Response
     {
         $product = $this->productRepository->find($id);
-        if(is_null($product)){
+        if($product === null){
             $view = $this->view(null, 404);
             $view->setFormat('json');
             return $this->handleView($view);

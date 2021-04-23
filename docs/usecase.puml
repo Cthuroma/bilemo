@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+:Clients:
+
+package Application {
+		Clients -- (Get a Token [login])
+		Clients -- (Get a list of his users)
+		Clients -- (Get one of his users)
+		Clients -- (Add one of his users)
+		Clients -- (Delete one of his users)
+		Clients -- (Get a list of all products)
+    Clients -- (Get one product)
+}
+@enduml

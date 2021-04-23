@@ -113,7 +113,7 @@ class UserController extends AbstractFOSRestController
     {
         $user = $this->userRepository->find($id);
         $loggedUser = $this->getUser();
-        if(is_null($user) || $user->getClient() !== $loggedUser){
+        if($user === null || $user->getClient() !== $loggedUser){
             $view = $this->view(null, 404);
             $view->setFormat('json');
             return $this->handleView($view);
@@ -174,7 +174,7 @@ class UserController extends AbstractFOSRestController
     {
         $client = $this->getUser();
         $user = $this->userRepository->find($id);
-        if(is_null($user)){
+        if($user === null){
             $view = $this->view(null, 404);
             $view->setFormat('json');
             return $this->handleView($view);
