@@ -1,5 +1,7 @@
 # Bilemo
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/94bd9b4740834668abb2b2f956b27457)](https://app.codacy.com/gh/Cthuroma/bilemo?utm_source=github.com&utm_medium=referral&utm_content=Cthuroma/bilemo&utm_campaign=Badge_Grade_Settings)
+
 ## Dependencies
 
 Dependency  | Version
