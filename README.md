@@ -55,4 +55,15 @@ composer reset
 
 ## Docs
 
-You can find PUML and PNG files of various diagrams in the /docs/uml directory.
+The API has an interactive documentation on the route :
+```bash
+/api/doc
+```
+Also readable in json format on the route :
+```bash
+/api/doc.json
+```
+
+And you can find PUML and PNG files of various diagrams in the /docs/uml directory.
+
+
