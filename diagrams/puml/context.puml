@@ -1,6 +1,0 @@
-@startuml
-left to right direction
-:Client:
-rectangle API
-Client -- API
-@enduml
